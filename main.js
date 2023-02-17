@@ -5,36 +5,32 @@ let rawdata = fs.readFileSync('users.json');
 let data = JSON.parse(rawdata);
 
 const answer = argv[2];
-let liste = [];
-let trouvé;
 
-if (answer == "société") {
-    for (element in data) {
-        for (el in liste) {
-            if (el.company == data[element].company) {
-                trouvé = 1;
-            } else {
-                trouvé = 0;
-            }
-        }
-        let obj = new Object();
-        if (trouvé) {
-            el.compteur += 1;
-        } else {
-            obj.company = data[element].company;
-            obj.compteur = 1;
-            liste.push(obj);
-        }
-    }
-    for(society in liste){
-        console.log(society);
-    }
-} else if (answer == "pays") {
-    for (element in data) {
-        console.log(data[element].country);
-    }
+if (answer === "company") {
+    const group = data.reduce((company, user) => {
+        company[user.company] = (company[user.company] ?? 0) + 1;
+        return company;
+    }, {});
+
+    const sort = Object.entries(group).sort((a, b) => b[1] - a[1]);
+
+    sort.forEach(([group, count]) => {
+        console.log(`${group} - ${count}`);
+    });
+
+} else if (answer === "country") {
+    const group = data.reduce((country, user) => {
+        country[user.country] = (country[user.country] ?? 0) + 1;
+        return country;
+    }, {});
+
+    const sort = Object.entries(group).sort((a, b) => b[1] - a[1]);
+
+    sort.forEach(([group, count]) => {
+        console.log(`${group} - ${count}`);
+    });
 } else {
-    console.log('RAPPEL : Les arguments sont soit société soit pays !\n');
+    console.log('RAPPEL : Les arguments sont soit company soit country !\n');
 }
 
 
