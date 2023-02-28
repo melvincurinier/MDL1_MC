@@ -23,15 +23,28 @@ function getArgv(indice) {
 
 /**
  * 
- * @param {*} attr 
  * @param {*} data 
  * @returns 
  */
-function countByAttr(attr, data) {
-    data.reduce((tab) => {
-        tab[attr] = (tab[attr] ?? 0) + 1;
-    })
-    return tab;
+function getCountByCompany(data) {
+    const countByCompany = data.reduce((tab, user) => {
+        tab[user.company] = (tab[user.company] ?? 0) + 1;
+        return tab;
+    }, {});
+    return countByCompany;
+}
+
+/**
+ * 
+ * @param {*} data 
+ * @returns 
+ */
+function getCountByCountry(data) {
+    const countByCountry = data.reduce((tab, user) => {
+        tab[user.country] = (tab[user.country] ?? 0) + 1;
+        return tab;
+    }, {});
+    return countByCountry;
 }
 
 /**
@@ -54,17 +67,17 @@ function print(sort) {
     })
 }
 
-const path = './user.json';
+const path = 'users.json';
 let data = getData(path);
 
 let input = getArgv(2);
 
 if (input === "company") {
-    let group = countByAttr(user.company, data);
+    let group = getCountByCompany(data);
     const sorted = sort(group);
     print(sorted);
 } else if (input === "country") {
-    let group = countByAttr(user.country, data);
+    let group = getCountByCountry(data);
     const sorted = sort(group);
     print(sorted);
 } else {
