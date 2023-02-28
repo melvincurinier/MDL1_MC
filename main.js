@@ -1,5 +1,7 @@
 const fs = require('fs');
 const { argv } = require('process');
+const readline = require('readline/promises');
+const { stdin: input, stdout: output } = require('process');
 
 /**
  * 
@@ -70,16 +72,29 @@ function print(sort) {
 const path = 'users.json';
 let data = getData(path);
 
-let input = getArgv(2);
+async function readInput(){
+    const rl = readline.createInterface({ input, output });
+    try {
+        const answer = await rl.question('Which attributes ? company or country');
+        let trim = answer.trim();
+        if (trim === 'company') {
+            let group = getCountByCompany(data);
+            const sorted = sort(group);
+            print(sorted);
+        } else if (trim === 'country') {
+            let group = getCountByCountry(data);
+            const sorted = sort(group);
+            print(sorted);
+        } else {
+            console.log('RAPPEL : Les arguments sont soit company soit country !\n');
+        }
+    } catch (err) {
+        console.log(`Error: `, err);
+    } finally {
+        rl.close();
+    }
+    readInput();
+    process.exit(1);
+};
 
-if (input === "company") {
-    let group = getCountByCompany(data);
-    const sorted = sort(group);
-    print(sorted);
-} else if (input === "country") {
-    let group = getCountByCountry(data);
-    const sorted = sort(group);
-    print(sorted);
-} else {
-    console.log('RAPPEL : Les arguments sont soit company soit country !\n');
-}
+readInput();
