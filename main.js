@@ -6,7 +6,7 @@ const { argv } = require('process');
  * @param {*} path 
  * @returns data du fichier au bout du chemin
  */
-function getData(path){
+function getData(path) {
     let rawdata = fs.readFileSync(`${path}`);
     let data = JSON.parse(rawdata);
     return data;
@@ -17,42 +17,56 @@ function getData(path){
  * @param {*} indice le indice ième du tableau argv
  * @returns argument
  */
-function getArgv(indice){
+function getArgv(indice) {
     return argv[indice];
 }
 
-function groupByAttr(attr, path){
-    let data = getData(path);
-    const group = data.reduce((tab) =>{
+/**
+ * 
+ * @param {*} attr 
+ * @param {*} data 
+ * @returns 
+ */
+function countByAttr(attr, data) {
+    data.reduce((tab) => {
         tab[attr] = (tab[attr] ?? 0) + 1;
     })
-    return group;
+    return tab;
 }
 
-
-if (answer === "company") {
-    const group = data.reduce((company, user) => {
-        company[user.company] = (company[user.company] ?? 0) + 1;
-        return company;
-    }, {});
-
+/**
+ * 
+ * @param {*} group 
+ * @returns 
+ */
+function sort(group) {
     const sort = Object.entries(group).sort((a, b) => b[1] - a[1]);
+    return sort;
+}
 
+/**
+ * 
+ * @param {*} sort 
+ */
+function print(sort) {
     sort.forEach(([group, count]) => {
         console.log(`${group} - ${count}`);
-    });
+    })
+}
 
-} else if (answer === "country") {
-    const group = data.reduce((country, user) => {
-        country[user.country] = (country[user.country] ?? 0) + 1;
-        return country;
-    }, {});
+const path = './user.json';
+let data = getData(path);
 
-    const sort = Object.entries(group).sort((a, b) => b[1] - a[1]);
+let input = getArgv(2);
 
-    sort.forEach(([group, count]) => {
-        console.log(`${group} - ${count}`);
-    });
+if (input === "company") {
+    let group = countByAttr(user.company, data);
+    const sorted = sort(group);
+    print(sorted);
+} else if (input === "country") {
+    let group = countByAttr(user.country, data);
+    const sorted = sort(group);
+    print(sorted);
 } else {
     console.log('RAPPEL : Les arguments sont soit company soit country !\n');
 }
