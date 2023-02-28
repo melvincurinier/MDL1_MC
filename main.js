@@ -3,10 +3,11 @@ const { argv } = require('process');
 
 /**
  * 
- * @returns data from json
+ * @param {*} path 
+ * @returns data du fichier au bout du chemin
  */
-function getData(){
-    let rawdata = fs.readFileSync('users.json');
+function getData(path){
+    let rawdata = fs.readFileSync(`${path}`);
     let data = JSON.parse(rawdata);
     return data;
 }
@@ -19,6 +20,15 @@ function getData(){
 function getArgv(indice){
     return argv[indice];
 }
+
+function groupByAttr(attr, path){
+    let data = getData(path);
+    const group = data.reduce((tab) =>{
+        tab[attr] = (tab[attr] ?? 0) + 1;
+    })
+    return group;
+}
+
 
 if (answer === "company") {
     const group = data.reduce((company, user) => {
@@ -46,11 +56,3 @@ if (answer === "company") {
 } else {
     console.log('RAPPEL : Les arguments sont soit company soit country !\n');
 }
-
-
-
-
-
-
-
-
