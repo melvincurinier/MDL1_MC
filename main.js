@@ -11,7 +11,14 @@ function getData(){
     return data;
 }
 
-const answer = argv[2];
+/**
+ * 
+ * @param {*} indice le indice ième du tableau argv
+ * @returns argument
+ */
+function getArgv(indice){
+    return argv[indice];
+}
 
 if (answer === "company") {
     const group = data.reduce((company, user) => {
