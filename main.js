@@ -1,8 +1,15 @@
 const fs = require('fs');
 const { argv } = require('process');
 
-let rawdata = fs.readFileSync('users.json');
-let data = JSON.parse(rawdata);
+/**
+ * 
+ * @returns data from json
+ */
+function getData(){
+    let rawdata = fs.readFileSync('users.json');
+    let data = JSON.parse(rawdata);
+    return data;
+}
 
 const answer = argv[2];
 
